@@ -20,6 +20,8 @@ import android.os.UpdateEngineCallback;
 import android.os.storage.StorageManager;
 import android.util.Log;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -296,19 +298,21 @@ public class Service extends IntentService {
                 contentLength = connection.getContentLengthLong() + downloaded;
                 input = connection.getInputStream();
             } else {
-                try {
-                    Log.d(TAG, "fetch incremental " + incrementalUpdate);
-                    downloadFile = incrementalUpdate;
-                    connection = fetchData(network, downloadFile);
-                    contentLength = connection.getContentLengthLong();
-                    input = connection.getInputStream();
-                } catch (final IOException e) {
+                Log.d(TAG, "fetch incremental " + incrementalUpdate);
+                downloadFile = incrementalUpdate;
+                connection = fetchData(network, downloadFile);
+                if (connection.getResponseCode() == HTTP_NOT_FOUND) {
+                    final InputStream error = connection.getErrorStream();
+                    if (error != null) {
+                        error.close();
+                    }
+
                     Log.d(TAG, "incremental not found, fetch full update " + fullUpdate);
                     downloadFile = fullUpdate;
                     connection = fetchData(network, downloadFile);
-                    contentLength = connection.getContentLengthLong();
-                    input = connection.getInputStream();
                 }
+                contentLength = connection.getContentLengthLong();
+                input = connection.getInputStream();
                 downloaded = 0;
                 Files.deleteIfExists(UPDATE_PATH.toPath());
             }
