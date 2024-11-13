@@ -290,10 +290,24 @@ public class Service extends IntentService {
                 Log.d(TAG, "resume fetch of " + downloadFile + " from " + downloaded + " bytes");
                 connection = fetchData(network, downloadFile);
                 connection.setRequestProperty("Range", "bytes=" + downloaded + "-");
-                if (connection.getResponseCode() == HTTP_RANGE_NOT_SATISFIABLE) {
+                final int responseCode = connection.getResponseCode();
+                if (responseCode == HTTP_RANGE_NOT_SATISFIABLE) {
                     Log.d(TAG, "download completed previously");
                     onDownloadFinished(streaming, targetBuildDate, channel);
                     return;
+                }
+                if (responseCode == HTTP_NOT_FOUND && incrementalUpdate.equals(downloadFile)) {
+                    final InputStream error = connection.getErrorStream();
+                    if (error != null) {
+                        error.close();
+                    }
+
+                    downloaded = 0;
+                    UPDATE_PATH.delete();
+
+                    Log.d(TAG, "previous incremental not found, fetch full update " + fullUpdate);
+                    downloadFile = fullUpdate;
+                    connection = fetchData(network, downloadFile);
                 }
                 contentLength = connection.getContentLengthLong() + downloaded;
                 input = connection.getInputStream();
