@@ -317,6 +317,8 @@ public class Service extends IntentService {
                 contentLength = connection.getContentLengthLong() + downloaded;
                 input = connection.getInputStream();
             } else {
+                Files.deleteIfExists(UPDATE_PATH.toPath());
+
                 Log.d(TAG, "fetch incremental " + incrementalUpdate);
                 downloadFile = incrementalUpdate;
                 connection = fetchData(network, downloadFile);
@@ -332,7 +334,6 @@ public class Service extends IntentService {
                 }
                 contentLength = connection.getContentLengthLong();
                 input = connection.getInputStream();
-                Files.deleteIfExists(UPDATE_PATH.toPath());
             }
 
             notificationHandler.showDownloadNotification(downloaded, contentLength);
