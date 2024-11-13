@@ -115,6 +115,10 @@ public class Service extends IntentService {
         try {
             monitor.await();
         } catch (InterruptedException e) {}
+
+        if (!engine.unbind()) {
+            Log.e(TAG, "unable to unbind update_engine");
+        }
     }
 
     private static ZipEntry getEntry(final ZipFile zipFile, final String name) throws GeneralSecurityException {
