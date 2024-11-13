@@ -96,6 +96,8 @@ public class Service extends IntentService {
                     annoyUser();
                 } else {
                     Log.d(TAG, "onPayloadApplicationComplete: " + errorCode);
+                    // error messages are not localized, Throwable#getMessage() is used elsewhere
+                    notificationHandler.showFailureNotification("update_engine error code: " + errorCode);
                     mUpdating = false;
                 }
                 UPDATE_PATH.delete();
