@@ -287,6 +287,11 @@ public class Service extends IntentService {
 
             if (incrementalUpdate.equals(downloadFile) || fullUpdate.equals(downloadFile)) {
                 downloaded = UPDATE_PATH.length();
+            } else {
+                downloaded = 0;
+            }
+
+            if (downloaded > 0) {
                 Log.d(TAG, "resume fetch of " + downloadFile + " from " + downloaded + " bytes");
                 connection = fetchData(network, downloadFile);
                 connection.setRequestProperty("Range", "bytes=" + downloaded + "-");
@@ -327,7 +332,6 @@ public class Service extends IntentService {
                 }
                 contentLength = connection.getContentLengthLong();
                 input = connection.getInputStream();
-                downloaded = 0;
                 Files.deleteIfExists(UPDATE_PATH.toPath());
             }
 
