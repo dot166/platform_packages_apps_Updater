@@ -37,6 +37,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import libcore.io.IoUtils;
 
 public class Service extends IntentService {
@@ -49,6 +51,8 @@ public class Service extends IntentService {
     private static final File UPDATE_PATH = new File("/data/ota_package/update.zip");
     private static final String PREFERENCE_DOWNLOAD_FILE = "download_file";
     private static final int HTTP_RANGE_NOT_SATISFIABLE = 416;
+
+    private final ModernTLSSocketFactory tlsSocketFactory = new ModernTLSSocketFactory();
 
     private NotificationHandler notificationHandler;
     private boolean mUpdating = false;
@@ -65,7 +69,8 @@ public class Service extends IntentService {
 
     private HttpURLConnection fetchData(final Network network, final String path) throws IOException {
         final URL url = new URL(getString(R.string.url) + path);
-        final HttpURLConnection urlConnection = (HttpURLConnection) network.openConnection(url);
+        final HttpsURLConnection urlConnection = (HttpsURLConnection) network.openConnection(url);
+        urlConnection.setSSLSocketFactory(tlsSocketFactory);
         urlConnection.setConnectTimeout(CONNECT_TIMEOUT);
         urlConnection.setReadTimeout(READ_TIMEOUT);
         return urlConnection;
