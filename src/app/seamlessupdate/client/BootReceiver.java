@@ -16,7 +16,7 @@ public class BootReceiver extends BroadcastReceiver {
             PeriodicJob.schedule(context);
 
             if (!preferences.contains(Settings.KEY_USE_SECURITY_PREVIEW_CHANNEL)) {
-                NotificationHandler.showSetSecurityPreviewNotification(context);
+                //NotificationHandler.showSetSecurityPreviewNotification(context); disabled because we cannot provide these releases as we don't have the sources for them
             }
         } else {
             context.getPackageManager().setApplicationEnabledSetting(context.getPackageName(),
