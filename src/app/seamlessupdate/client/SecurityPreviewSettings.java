@@ -65,7 +65,7 @@ public class SecurityPreviewSettings extends FragmentActivity {
     public static class SettingsFragment extends Fragment {
         private static final String TAG = "SecPreviewSettingsFrag";
         // set the preference to default to true, but not persisted immediately
-        private static final boolean DEFAULT_SECURITY_PREVIEW_WHEN_UNSET = true;
+        private static final boolean DEFAULT_SECURITY_PREVIEW_WHEN_UNSET = false;
 
         private boolean isUsingPreviewChannel;
 
@@ -121,11 +121,11 @@ public class SecurityPreviewSettings extends FragmentActivity {
 
             updateUi(checkbox);
             container.setOnClickListener((v) -> {
-                isUsingPreviewChannel = !isUsingPreviewChannel;
+                isUsingPreviewChannel = false;
                 updateUi(checkbox);
             });
             checkbox.setOnClickListener((v) -> {
-                isUsingPreviewChannel = !isUsingPreviewChannel;
+                isUsingPreviewChannel = false;
                 updateUi(checkbox);
             });
         }

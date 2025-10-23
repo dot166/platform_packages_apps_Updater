@@ -56,7 +56,7 @@ public class Settings extends CollapsingToolbarBaseActivity {
             case 0:
                 return false;
             case 1:
-                return true;
+                return false;
             default:
                 return false;
         }
