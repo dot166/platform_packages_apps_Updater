@@ -106,6 +106,9 @@ public class Settings extends CollapsingToolbarBaseActivity {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            getPreferences(requireContext()).edit()
+                    .putString(KEY_CHANNEL, requireContext().getString(R.string.channel_default))
+                    .commit();
             getPreferenceManager().setStorageDeviceProtected();
             setPreferencesFromResource(R.xml.settings, rootKey);
 
@@ -181,6 +184,9 @@ public class Settings extends CollapsingToolbarBaseActivity {
         @Override
         public void onResume() {
             super.onResume();
+            getPreferences(requireContext()).edit()
+                    .putString(KEY_CHANNEL, requireContext().getString(R.string.channel_default))
+                    .commit();
             getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
             final ListPreference networkType = (ListPreference) findPreference(KEY_NETWORK_TYPE);
             networkType.setValue(Integer.toString(getNetworkType(requireContext())));
