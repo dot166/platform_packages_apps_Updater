@@ -12,6 +12,7 @@
 
         <ListPreference app:key="channel"
                 app:title="@string/channel_title"
+                app:enabled="false"
                 app:iconSpaceReserved="false"
                 app:useSimpleSummaryProvider="true"
                 app:entries="@array/channel_entries"
