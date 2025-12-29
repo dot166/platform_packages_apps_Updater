@@ -289,7 +289,7 @@ public class Service extends IntentService {
                 throw new IOException("Network is unavailable");
             }
 
-            final String channel = SystemProperties.get("sys.update.channel", Settings.getChannel(this));
+            final String channel = getString(R.string.channel_default);
 
             Log.d(TAG, "fetching metadata for " + DEVICE + "-" + channel);
             connection = fetchData(network, DEVICE + "-" + channel);
